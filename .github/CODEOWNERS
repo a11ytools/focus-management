@@ -1,0 +1,12 @@
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# they will be requested for review when someone opens a pull request.
+* @a11ytools/core-team
+
+# Dependencies and build process ownership
+package.json @a11ytools/maintainers
+tsup.config.ts @a11ytools/maintainers
+.github/workflows/ @a11ytools/maintainers
+
+# Core functionality
+/src/ @a11ytools/core-team 
