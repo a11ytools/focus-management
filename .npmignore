@@ -1,0 +1,28 @@
+# Development
+.github
+.vscode
+node_modules
+src
+tests
+examples
+coverage
+.eslintrc
+.eslintignore
+.prettierrc
+.prettierignore
+tsconfig.json
+vitest.config.ts
+tsup.config.ts
+
+# Misc
+.DS_Store
+*.log
+.env
+.env.*
+
+# Git
+.git
+.gitignore
+
+# Build artifacts
+*.tsbuildinfo 
