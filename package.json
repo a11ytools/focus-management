@@ -20,9 +20,9 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     }
   },
   "sideEffects": false,
@@ -67,7 +67,7 @@
     "happy-dom": "^12.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tsup": "^6.7.0",
+    "tsup": "^8.4.0",
     "typescript": "^5.0.4",
     "vitest": "^0.34.0"
   },
