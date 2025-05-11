@@ -11,7 +11,7 @@ export default defineConfig({
   external: ['react'],
   esbuildOptions(options) {
     options.banner = {
-      js: '/**\n * @preserve\n * @a11ytools/focus-management\n * Focus management utilities for building accessible web applications\n * @license MIT\n */\n'
+      js: '/**\n * @preserve\n * @a11y-tools/focus-management\n * Focus management utilities for building accessible web applications\n * @license MIT\n */\n',
     };
   },
 }); 

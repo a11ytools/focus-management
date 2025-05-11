@@ -1,5 +1,5 @@
 /**
- * @a11ytools/focus-management
+ * @a11y-tools/focus-management
  * A collection of utilities for managing focus in web applications.
  * @packageDocumentation
  */

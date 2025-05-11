@@ -1,10 +1,10 @@
 /**
  * Vanilla JavaScript example of implementing a focus trap for a modal
- * using @a11ytools/focus-management
+ * using @a11y-tools/focus-management
  */
 
-// Import the core utilities (this would be from '@a11ytools/focus-management' in a real app)
-// const { getFocusableElements, saveFocus, returnFocus } = require('@a11ytools/focus-management');
+// Import the core utilities (this would be from '@a11y-tools/focus-management' in a real app)
+// const { getFocusableElements, saveFocus, returnFocus } = require('@a11y-tools/focus-management');
 
 // Mock implementation for the example
 const mockFocusManagement = {
@@ -45,7 +45,7 @@ function setupModal() {
   container.innerHTML = `
     <div class="demo-container">
       <h1>Vanilla JS Modal Example</h1>
-      <p>This demonstrates using @a11ytools/focus-management in vanilla JavaScript.</p>
+      <p>This demonstrates using @a11y-tools/focus-management in vanilla JavaScript.</p>
       
       <button id="open-modal">Open Modal</button>
       

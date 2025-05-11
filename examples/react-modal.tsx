@@ -9,7 +9,7 @@ interface ModalProps {
 }
 
 /**
- * Accessible modal component that traps focus using @a11ytools/focus-management
+ * Accessible modal component that traps focus using @a11y-tools/focus-management
  */
 export function AccessibleModal({ isOpen, onClose, title, children }: ModalProps) {
   // Use the focus trap hook, which handles:
@@ -92,20 +92,24 @@ export function ModalExample() {
     <div>
       <h1>Modal Example</h1>
       <p>Click the button below to open an accessible modal:</p>
-      
-      <button onClick={openModal}>
-        Open Modal
-      </button>
-      
+
+      <button onClick={openModal}>Open Modal</button>
+
       <AccessibleModal
         isOpen={isModalOpen}
         onClose={closeModal}
         title="Accessible Modal Example"
       >
-        <p>This modal demonstrates focus trapping with a11ytools/focus-management.</p>
-        <p>Try using Tab and Shift+Tab to navigate - focus will stay within the modal.</p>
+        <p>
+          This modal demonstrates focus trapping with
+          a11y-tools/focus-management.
+        </p>
+        <p>
+          Try using Tab and Shift+Tab to navigate - focus will stay within the
+          modal.
+        </p>
         <p>You can also press Escape to close.</p>
-        
+
         <form>
           <div>
             <label htmlFor="name">Name:</label>

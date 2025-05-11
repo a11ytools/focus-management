@@ -1,10 +1,10 @@
-# @a11ytools/focus-management
+# @a11y-tools/focus-management
 
-![npm](https://img.shields.io/npm/v/@a11ytools/focus-management)
-![License](https://img.shields.io/npm/l/@a11ytools/focus-management)
-![Bundle Size](https://img.shields.io/bundlephobia/minzip/@a11ytools/focus-management)
+![npm](https://img.shields.io/npm/v/@a11y-tools/focus-management)
+![License](https://img.shields.io/npm/l/@a11y-tools/focus-management)
+![Bundle Size](https://img.shields.io/bundlephobia/minzip/@a11y-tools/focus-management)
 
-> Part of the @a11ytools suite of open-source accessibility libraries
+> Part of the @a11y-tools suite of open-source accessibility libraries
 
 A lightweight, accessibility-focused utility library for managing keyboard focus in web applications. This package helps developers build accessible interfaces by simplifying focus management in modals, dialogs, popovers, and other UI components.
 
@@ -22,13 +22,13 @@ A lightweight, accessibility-focused utility library for managing keyboard focus
 
 ```bash
 # npm
-npm install @a11ytools/focus-management
+npm install @a11y-tools/focus-management
 
 # yarn
-yarn add @a11ytools/focus-management
+yarn add @a11y-tools/focus-management
 
 # pnpm
-pnpm add @a11ytools/focus-management
+pnpm add @a11y-tools/focus-management
 ```
 
 **Important:** React is a peer dependency but is **optional** - the core utilities work without it in any JavaScript environment.
@@ -39,7 +39,7 @@ pnpm add @a11ytools/focus-management
 
 ```tsx
 import { useState } from 'react';
-import { useFocusTrap } from '@a11ytools/focus-management';
+import { useFocusTrap } from '@a11y-tools/focus-management';
 
 function Modal({ isOpen, onClose, children }) {
   const modalRef = useFocusTrap({
@@ -72,7 +72,7 @@ import {
   getFocusableElements, 
   saveFocus, 
   returnFocus 
-} from '@a11ytools/focus-management';
+} from '@a11y-tools/focus-management';
 
 // When opening a modal
 function openModal() {
@@ -142,7 +142,7 @@ function closeModal() {
 Determines if an element is focusable.
 
 ```ts
-import { isFocusable } from '@a11ytools/focus-management';
+import { isFocusable } from '@a11y-tools/focus-management';
 
 const button = document.querySelector('button');
 if (isFocusable(button)) {
@@ -155,7 +155,7 @@ if (isFocusable(button)) {
 Determines if an element is keyboard-tabbable (can be reached with Tab key).
 
 ```ts
-import { isTabbable } from '@a11ytools/focus-management';
+import { isTabbable } from '@a11y-tools/focus-management';
 
 const element = document.querySelector('.my-element');
 if (isTabbable(element)) {
@@ -168,7 +168,7 @@ if (isTabbable(element)) {
 Gets all focusable elements within a container.
 
 ```ts
-import { getFocusableElements } from '@a11ytools/focus-management';
+import { getFocusableElements } from '@a11y-tools/focus-management';
 
 // Get all focusable elements
 const elements = getFocusableElements(document.getElementById('modal'));
@@ -186,7 +186,7 @@ Options:
 Focus the first focusable element within a container.
 
 ```ts
-import { focusFirstElement } from '@a11ytools/focus-management';
+import { focusFirstElement } from '@a11y-tools/focus-management';
 
 // Focus the first element in a modal
 focusFirstElement(document.getElementById('modal'));
@@ -205,7 +205,7 @@ Options:
 Focus the first element matching a selector within a container.
 
 ```ts
-import { focusFirstElementBySelector } from '@a11ytools/focus-management';
+import { focusFirstElementBySelector } from '@-/focus-management';
 
 // Focus the first button with 'submit' type
 focusFirstElementBySelector(dialog, 'button[type="submit"]');
@@ -216,7 +216,7 @@ focusFirstElementBySelector(dialog, 'button[type="submit"]');
 Saves the currently focused element to return to later.
 
 ```ts
-import { saveFocus } from '@a11ytools/focus-management';
+import { saveFocus } from '@a11y-tools/focus-management';
 
 // Save focus before opening a modal
 function openMyModal() {
@@ -230,7 +230,7 @@ function openMyModal() {
 Returns focus to the previously saved element.
 
 ```ts
-import { returnFocus } from '@a11ytools/focus-management';
+import { returnFocus } from '@a11y-tools/focus-management';
 
 // Return focus when closing a modal
 function closeMyModal() {
@@ -248,7 +248,7 @@ Options:
 Creates a scoped focus manager for nested contexts, such as when you have multiple dialogs or modals that can be opened in sequence.
 
 ```ts
-import { createFocusManager } from '@a11ytools/focus-management';
+import { createFocusManager } from '@a11y-tools/focus-management';
 
 // Create separate focus managers for different UI components
 const dialogFocusManager = createFocusManager();
@@ -279,7 +279,7 @@ This approach allows you to manage focus independently in different components, 
 React hook that creates a focus trap within a container element. This hook implements WCAG 2.1.2 (No Keyboard Trap) by ensuring that keyboard focus can be moved to and from the component when appropriate, while still containing focus within the component when needed for modals, dialogs, and other overlay patterns.
 
 ```tsx
-import { useFocusTrap } from '@a11ytools/focus-management';
+import { useFocusTrap } from '@a11y-tools/focus-management';
 
 function Modal({ isOpen, onClose }) {
   const trapRef = useFocusTrap({
@@ -330,4 +330,4 @@ We recommend using this library in conjunction with testing tools:
 
 ## License
 
-MIT © [a11ytools Contributors](https://github.com/a11ytools) 
+MIT

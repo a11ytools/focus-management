@@ -1,6 +1,6 @@
 {
-  "name": "@a11ytools/focus-management",
-  "version": "0.1.0",
+  "name": "@a11y-tools/focus-management",
+  "version": "1.0.0",
   "description": "A lightweight, accessibility-focused utility library for managing keyboard focus in web applications",
   "keywords": [
     "accessibility",
@@ -13,7 +13,7 @@
     "WAI-ARIA",
     "screen reader"
   ],
-  "author": "a11ytools Contributors",
+  "author": "Venkata Phanindra Kumar Janapareddy",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

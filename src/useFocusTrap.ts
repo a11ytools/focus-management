@@ -181,7 +181,9 @@ export function useFocusTrap<T extends HTMLElement = HTMLElement>(
           // If no focusable elements found, focus the container itself
           if (!focused && containerRef.current) {
             // Log a warning about missing tabbable elements
-            console.warn('[a11ytools] No tabbable elements found inside container.');
+            console.warn(
+              '[a11y-tools] No tabbable elements found inside container.'
+            );
             
             // Set tabindex to -1 if not already set to allow focus
             if (!containerRef.current.hasAttribute('tabindex')) {
