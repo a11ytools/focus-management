@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { useFocusTrap } from '../useFocusTrap';
 import * as focusUtilities from '../returnFocus';
 import * as focusFirstElementModule from '../focusFirstElement';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
 // Mock the focus utilities to track calls and control behavior
 vi.mock('../returnFocus', async () => {
   const actual = await vi.importActual('../returnFocus');
   return {
-    ...actual as object,
+    ...(actual as object),
     saveFocus: vi.fn(),
     returnFocus: vi.fn(),
   };
@@ -18,8 +18,8 @@ vi.mock('../returnFocus', async () => {
 vi.mock('../focusFirstElement', async () => {
   const actual = await vi.importActual('../focusFirstElement');
   return {
-    ...actual as object,
-    focusFirstElement: vi.fn()
+    ...(actual as object),
+    focusFirstElement: vi.fn(),
   };
 });
 
@@ -76,11 +76,7 @@ function ToggleableContainer() {
       <button data-testid="toggle-button" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? 'Close' : 'Open'}
       </button>
-      <TestModal 
-        isOpen={isOpen} 
-        onEscapeKey={onEscapeKey}
-        onFocusRestore={onFocusRestore}
-      />
+      <TestModal isOpen={isOpen} onEscapeKey={onEscapeKey} onFocusRestore={onFocusRestore} />
     </div>
   );
 }
@@ -114,37 +110,37 @@ describe('useFocusTrap', () => {
 
   it('should not auto-focus when autoFocus is false', () => {
     const mockFocusFirst = vi.spyOn(focusFirstElementModule, 'focusFirstElement');
-    
+
     render(<TestModal autoFocus={false} />);
-    
+
     // Should still save focus
     expect(focusUtilities.saveFocus).toHaveBeenCalledTimes(1);
-    
+
     // But should not try to focus any element
     expect(mockFocusFirst).not.toHaveBeenCalled();
   });
 
   it('should handle tab key to keep focus within the trap', () => {
     render(<TestModal />);
-    
+
     const container = screen.getByTestId('modal-container');
     const firstButton = screen.getByTestId('first-button');
     const lastButton = screen.getByTestId('last-button');
-    
+
     // Focus the first button
     firstButton.focus();
     expect(document.activeElement).toBe(firstButton);
-    
+
     // Simulate tab to last button
     fireEvent.keyDown(container, { key: 'Tab', code: 'Tab' });
-    
+
     // Focus the last button
     lastButton.focus();
     expect(document.activeElement).toBe(lastButton);
-    
+
     // Simulate Tab on the last button (should wrap to first)
     fireEvent.keyDown(container, { key: 'Tab', code: 'Tab' });
-    
+
     // Would wrap to first element in a real browser, but we need to simulate it
     // since jsdom doesn't actually move focus
     firstButton.focus();
@@ -152,7 +148,7 @@ describe('useFocusTrap', () => {
 
     // Now test Shift+Tab from first button (should wrap to last)
     fireEvent.keyDown(container, { key: 'Tab', code: 'Tab', shiftKey: true });
-    
+
     // Would wrap to last element in a real browser
     lastButton.focus();
     expect(document.activeElement).toBe(lastButton);
@@ -161,25 +157,25 @@ describe('useFocusTrap', () => {
   it('should call onEscapeKey when Escape key is pressed', () => {
     const handleEscapeKey = vi.fn();
     render(<TestModal onEscapeKey={handleEscapeKey} />);
-    
+
     const container = screen.getByTestId('modal-container');
-    
+
     // Simulate pressing Escape
     fireEvent.keyDown(container, { key: 'Escape', code: 'Escape' });
-    
+
     // Check if the handler was called
     expect(handleEscapeKey).toHaveBeenCalledTimes(1);
   });
 
   it('should close the modal and restore focus when ESC is pressed', async () => {
     render(<ToggleableContainer />);
-    
+
     // Get the modal elements
     const container = screen.getByTestId('modal-container');
-    
+
     // Simulate pressing Escape
     fireEvent.keyDown(container, { key: 'Escape', code: 'Escape' });
-    
+
     // Modal should be closed
     expect(screen.queryByTestId('modal-container')).not.toBeInTheDocument();
   });
@@ -187,20 +183,18 @@ describe('useFocusTrap', () => {
   it('should call onFocusRestore callback when returning focus', async () => {
     const mockReturnFocus = vi.spyOn(focusUtilities, 'returnFocus');
     const onFocusRestore = vi.fn();
-    
-    const { unmount } = render(
-      <TestModal onFocusRestore={onFocusRestore} />
-    );
-    
+
+    const { unmount } = render(<TestModal onFocusRestore={onFocusRestore} />);
+
     // Unmounting should trigger the cleanup effect
     unmount();
-    
+
     // Wait for the Promise.resolve().then() to execute
-    await new Promise(resolve => setTimeout(resolve, 0));
-    
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     // Check that returnFocus was called
     expect(mockReturnFocus).toHaveBeenCalledTimes(1);
-    
+
     // Check that onFocusRestore was called
     expect(onFocusRestore).toHaveBeenCalledTimes(1);
   });
@@ -216,4 +210,4 @@ describe('useFocusTrap', () => {
     // This would require a custom React testing setup
     return;
   });
-}); 
+});

@@ -24,7 +24,7 @@ describe('getFocusableElements', () => {
 
     const container = document.getElementById('container');
     const elements = getFocusableElements(container);
-    
+
     expect(elements).toEqual([]);
   });
 
@@ -41,7 +41,7 @@ describe('getFocusableElements', () => {
 
     const container = document.getElementById('container');
     const elements = getFocusableElements(container);
-    
+
     expect(elements.length).toBe(4);
     expect(elements[0].id).toBe('button1');
     expect(elements[1].id).toBe('link1');
@@ -52,7 +52,7 @@ describe('getFocusableElements', () => {
   test('respects the onlyTabbable option', () => {
     // Mock the isTabbable function
     const mockIsTabbable = vi.spyOn(isFocusableModule, 'isTabbable');
-    
+
     // Make it return true only for specific elements
     mockIsTabbable.mockImplementation((element) => {
       return element?.id === 'button1' || element?.id === 'input1';
@@ -69,7 +69,7 @@ describe('getFocusableElements', () => {
 
     const container = document.getElementById('container');
     const elements = getFocusableElements(container, { onlyTabbable: true });
-    
+
     expect(elements.length).toBe(2);
     expect(elements[0].id).toBe('button1');
     expect(elements[1].id).toBe('input1');
@@ -89,15 +89,15 @@ describe('getFocusableElements', () => {
 
     const container = document.getElementById('container');
     const elements = getFocusableElements(container);
-    
+
     // Elements with positive tabindex come first in ascending order
     expect(elements.length).toBe(5);
     expect(elements[0].id).toBe('div1'); // tabindex="1"
     expect(elements[1].id).toBe('div2'); // tabindex="2"
-    
+
     // Then elements with tabindex="0" or implicit tabindex in DOM order
     // The exact order of these might vary, so we just check they're included
-    const remainingIds = elements.slice(2).map(el => el.id);
+    const remainingIds = elements.slice(2).map((el) => el.id);
     expect(remainingIds).toContain('button1');
     expect(remainingIds).toContain('div0');
     expect(remainingIds).toContain('link1');
@@ -115,7 +115,7 @@ describe('getFocusableElements', () => {
     // Create shadow DOM with focusable elements
     const shadowHost = document.getElementById('shadow-host');
     const shadowRoot = shadowHost?.attachShadow({ mode: 'open' });
-    
+
     if (shadowRoot) {
       shadowRoot.innerHTML = `
         <button id="shadow-button">Shadow Button</button>
@@ -125,7 +125,7 @@ describe('getFocusableElements', () => {
 
     const container = document.getElementById('container');
     const elements = getFocusableElements(container, { includeShadowDOM: true });
-    
+
     // Should find both regular elements and shadow DOM elements
     expect(elements.length).toBe(3);
     expect(elements[0].id).toBe('button1');
@@ -145,7 +145,7 @@ describe('getFocusableElements', () => {
     // Create shadow DOM with focusable elements
     const shadowHost = document.getElementById('shadow-host');
     const shadowRoot = shadowHost?.attachShadow({ mode: 'open' });
-    
+
     if (shadowRoot) {
       shadowRoot.innerHTML = `
         <button id="shadow-button">Shadow Button</button>
@@ -155,7 +155,7 @@ describe('getFocusableElements', () => {
 
     const container = document.getElementById('container');
     const elements = getFocusableElements(container, { includeShadowDOM: false });
-    
+
     // Should only find regular elements, not shadow DOM ones
     expect(elements.length).toBe(1);
     expect(elements[0].id).toBe('button1');
@@ -164,35 +164,33 @@ describe('getFocusableElements', () => {
   test('handles errors gracefully', () => {
     // Mock console.error to prevent test output noise
     const consoleErrorMock = vi.spyOn(console, 'error');
-    consoleErrorMock.mockImplementation(() => {});
+    consoleErrorMock.mockImplementation(() => {
+      /* intentionally empty */
+    });
 
     // Make querySelectorAll throw an error
     const mockElement = {
       querySelectorAll: () => {
         throw new Error('Mock error');
-      }
+      },
     };
 
-    // @ts-ignore - We're intentionally passing a partial mock
-    const elements = getFocusableElements(mockElement);
-    
+    // We're intentionally passing a partial mock
+    const elements = getFocusableElements(mockElement as unknown as Element);
+
     // Should return empty array on error
     expect(elements).toEqual([]);
     expect(consoleErrorMock).toHaveBeenCalled();
-    
+
     // Restore console.error
     consoleErrorMock.mockRestore();
   });
 
   test('handles SSR environments gracefully', () => {
-    // Create a module mock that simulates SSR by returning an empty array
-    const originalImplementation = getFocusableElements;
-    
     // Mock the document.querySelector to simulate SSR behavior
-    const originalDocument = global.document;
     const documentSpy = vi.spyOn(global, 'document', 'get');
-    documentSpy.mockReturnValue(undefined as any);
-    
+    documentSpy.mockReturnValue(undefined as unknown as Document);
+
     try {
       // Should return empty array and not throw
       const elements = getFocusableElements(null);
@@ -202,4 +200,4 @@ describe('getFocusableElements', () => {
       documentSpy.mockRestore();
     }
   });
-}); 
+});
