@@ -18,7 +18,7 @@ describe('focusFirstElement', () => {
   test('returns null in SSR environments', () => {
     // Mock the document to simulate SSR behavior
     const documentSpy = vi.spyOn(global, 'document', 'get');
-    documentSpy.mockReturnValue(undefined as any);
+    documentSpy.mockReturnValue(undefined as unknown as Document);
 
     try {
       // Should return null and not throw
@@ -44,7 +44,9 @@ describe('focusFirstElement', () => {
 
     // Mock focus function directly on the button element
     const mockFocus = vi.fn();
-    button!.focus = mockFocus;
+    if (button) {
+      button.focus = mockFocus;
+    }
 
     // Mock the getFocusableElements function
     const mockGetFocusable = vi.spyOn(getFocusableElementsModule, 'getFocusableElements');
@@ -131,10 +133,11 @@ describe('focusFirstElement', () => {
     ]);
 
     // Mock focus to throw an error
-    const mockFocus = vi.fn().mockImplementation(() => {
-      throw new Error('Mock focus error');
-    });
-    button!.focus = mockFocus;
+    if (button) {
+      button.focus = vi.fn().mockImplementation(() => {
+        throw new Error('Mock focus error');
+      });
+    }
 
     // Mock console.error to prevent test output noise
     const consoleErrorMock = vi.spyOn(console, 'error');
@@ -169,7 +172,7 @@ describe('focusFirstElementBySelector', () => {
   test('returns null in SSR environments', () => {
     // Mock the document to simulate SSR behavior
     const documentSpy = vi.spyOn(global, 'document', 'get');
-    documentSpy.mockReturnValue(undefined as any);
+    documentSpy.mockReturnValue(undefined as unknown as Document);
 
     try {
       // Should return null and not throw
@@ -194,7 +197,9 @@ describe('focusFirstElementBySelector', () => {
 
     // Mock focus function directly on the button element
     const mockFocus = vi.fn();
-    button1!.focus = mockFocus;
+    if (button1) {
+      button1.focus = mockFocus;
+    }
 
     // Set document.activeElement
     Object.defineProperty(document, 'activeElement', {
@@ -230,8 +235,13 @@ describe('focusFirstElementBySelector', () => {
     const mockFocus2 = vi.fn();
 
     // Apply mock focus methods to elements
-    button1!.focus = mockFocus1;
-    button2!.focus = mockFocus2;
+    if (button1) {
+      button1.focus = mockFocus1;
+    }
+
+    if (button2) {
+      button2.focus = mockFocus2;
+    }
 
     // Set up document.activeElement to return different values
     let activeElement: Element | null = null;
@@ -318,9 +328,11 @@ describe('focusFirstElementBySelector', () => {
 
     // Create mock query result to ensure it returns our buttons in order
     const mockQueryResult = [button1, button2];
-    vi.spyOn(container as Element, 'querySelectorAll').mockReturnValue(
-      mockQueryResult as unknown as NodeListOf<Element>
-    );
+    if (container) {
+      vi.spyOn(container as Element, 'querySelectorAll').mockReturnValue(
+        mockQueryResult as unknown as NodeListOf<Element>
+      );
+    }
 
     // Mock isFocusable to only return true for button2
     const mockIsFocusable = vi.spyOn(isFocusableModule, 'isFocusable');
@@ -328,7 +340,9 @@ describe('focusFirstElementBySelector', () => {
 
     // Mock focus for button2
     const mockFocus = vi.fn();
-    button2!.focus = mockFocus;
+    if (button2) {
+      button2.focus = mockFocus;
+    }
 
     // Set document.activeElement
     Object.defineProperty(document, 'activeElement', {
