@@ -42,7 +42,8 @@
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepare": "husky"
   },
   "peerDependencies": {
     "react": ">=16.8.0"
@@ -65,6 +66,9 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-vitest-globals": "^1.5.0",
     "happy-dom": "^15.11.7",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
+    "prettier": "^3.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tsup": "^8.4.0",
@@ -79,5 +83,9 @@
   "bugs": {
     "url": "https://github.com/a11ytools/focus-management/issues"
   },
-  "homepage": "https://github.com/a11ytools/focus-management#readme"
+  "homepage": "https://github.com/a11ytools/focus-management#readme",
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": "eslint --fix",
+    "*.{js,ts,jsx,tsx,json,md,yml}": "prettier --write"
+  }
 }
