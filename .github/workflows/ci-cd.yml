@@ -32,7 +32,18 @@ jobs:
         run: npm ci
       
       - name: Run tests
+        id: test_step
+        continue-on-error: true
         run: npm test
+      
+      # Fix for Rollup optional dependencies issue
+      - name: Fix dependencies and retry tests
+        if: steps.test_step.outcome == 'failure'
+        run: |
+          echo "First test attempt failed, trying to fix dependencies..."
+          rm -rf node_modules package-lock.json
+          npm install
+          npm test
       
       - name: Run build
         run: npm run build
