@@ -29,12 +29,12 @@ jobs:
           # Using clean install without optional dependencies to avoid platform-specific issues
           npm ci --no-optional
       
-      - name: Lint code
-        if: ${{ contains(join(fromJSON('["lint", "eslint", "prettier:check"]')), '*') }}
-        run: npm run lint || npm run eslint || npm run prettier:check || echo "No linting script found"
+      - name: Run linting
+        if: ${{ contains(toJson(fromJson('["lint", "eslint", "format", "prettier"]')), '*') }}
+        run: npm run lint || npm run eslint || npm run format || npm run prettier || echo "No linting script found"
       
       - name: Run tests
-        run: node --experimental-vm-modules node_modules/.bin/vitest run
+        run: npm test
         env:
           # Add any environment variables needed for tests
           NODE_ENV: test
