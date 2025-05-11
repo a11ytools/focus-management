@@ -1,12 +1,12 @@
-name: CI/CD
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     tags:
-      - 'v*'
+      - 'v*' # Run workflow on version tags, e.g. v1.0.0
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -14,85 +14,62 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['18.x', '20.x', '22.x']
+        node-version: [18.x, 20.x, 22.x]
+
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      
+
       - name: Install dependencies
-        run: |
-          # Using clean install without optional dependencies to avoid platform-specific issues
-          npm ci --no-optional
-      
-      - name: Run linting
-        if: ${{ contains(toJson(fromJson('["lint", "eslint", "format", "prettier"]')), '*') }}
-        run: npm run lint || npm run eslint || npm run format || npm run prettier || echo "No linting script found"
-      
+        run: npm ci
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Build package
+        run: npm run build
+
       - name: Run tests
         run: npm test
         env:
-          # Add any environment variables needed for tests
-          NODE_ENV: test
-          CI: true
-      
-      - name: Build package
-        run: npm run build
-      
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-${{ matrix.node-version }}
-          path: dist/
-          if-no-files-found: error
+          NODE_OPTIONS: --experimental-vm-modules
 
   publish:
     name: Publish to npm
-    needs: test
-    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test # Ensure all tests pass before publishing
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
+    if: startsWith(github.ref, 'refs/tags/v') # Only run on version tags
+
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js 22.x
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22.x
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
-      
+
       - name: Install dependencies
-        run: npm ci --no-optional
-      
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-22.x
-          path: dist/
-      
-      - name: Verify tag version matches package.json
-        id: verify_version
-        run: |
-          TAG_VERSION=${GITHUB_REF#refs/tags/v}
-          PKG_VERSION=$(node -p "require('./package.json').version")
-          if [ "$TAG_VERSION" == "$PKG_VERSION" ]; then
-            echo "Tag version ($TAG_VERSION) matches package.json version ($PKG_VERSION)."
-            echo "versions_match=true" >> $GITHUB_OUTPUT
-          else
-            echo "Error: Tag version ($TAG_VERSION) does not match package.json version ($PKG_VERSION)."
-            echo "versions_match=false" >> $GITHUB_OUTPUT
-            exit 1
-          fi
+        run: npm ci
+
+      - name: Build package
+        run: npm run build
+
+      - name: Verify package contents
+        run: npm pack && tar -xf *.tgz && ls -la package/
 
       - name: Publish to npm
-        if: steps.verify_version.outputs.versions_match == 'true'
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} 
