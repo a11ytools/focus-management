@@ -8,6 +8,7 @@ on:
     paths:
       - 'src/**'
       - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/ci-cd.yml'
   pull_request:
     branches: [ main ]
@@ -51,7 +52,7 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-${{ matrix.node-version }}
           path: dist/
           if-no-files-found: error
 
@@ -81,7 +82,7 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: dist
+          name: dist-22.x
           path: dist/
       
       - name: Verify version consistency
